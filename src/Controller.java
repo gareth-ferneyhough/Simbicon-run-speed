@@ -205,7 +205,7 @@ public class Controller {
     
     /** manually add a running controller to the states...*/
     void addRunningController(){
-        /* - State 0 - */
+        /* - State 4 - */
         state[nrStates] = new ConState();
         state[nrStates].num = nrStates;
         state[nrStates].localNum = 0;
@@ -215,18 +215,18 @@ public class Controller {
         state[nrStates].poseStance = false;
         state[nrStates].transTime = 0.21f;
         state[nrStates].sensorNum = 0;
-
-        state[nrStates].setThThDThDD(0, 0, 0, 0);
-        state[nrStates].setThThDThDD(1, 0.8f, 0, 0.2f);
-        state[nrStates].setThThDThDD(2, -1.84f, 0, 0);
-        state[nrStates].setThThDThDD(3, 0, 0, 0);
-        state[nrStates].setThThDThDD(4, -0.05f, 0, 0);
-        state[nrStates].setThThDThDD(5, 0.2f, 0, 0);
-        state[nrStates].setThThDThDD(6, 0.27f, 0, 0);
+        
+        state[nrStates].setThThDThDD(0, -0.2f, 0, 0);		// torso
+        state[nrStates].setThThDThDD(1, 0.8f, 0, 0.2f);		// rhip
+        state[nrStates].setThThDThDD(2, -1.84f, 0, 0);		// rknee
+        state[nrStates].setThThDThDD(3, 0, 0, 0);			// lhip
+        state[nrStates].setThThDThDD(4, -0.05f, 0, 0);		// lknee
+        state[nrStates].setThThDThDD(5, 0.2f, 0, 0);		// rankle
+        state[nrStates].setThThDThDD(6, 0.27f, 0, 0);		// lankle
         
         nrStates ++;
 
-        /* - State 1 - */
+        /* - State 5 - */
         state[nrStates] = new ConState();
         state[nrStates].num = nrStates;
         state[nrStates].localNum = 1;
@@ -237,16 +237,16 @@ public class Controller {
         state[nrStates].transTime = 0;
         state[nrStates].sensorNum = 0;
 
-        state[nrStates].setThThDThDD(0, -0.22f, 0, 0);
-        state[nrStates].setThThDThDD(1, 1.08f, 0.0f, 0.2f);
-        state[nrStates].setThThDThDD(2, -2.18f, 0, 0);
-        state[nrStates].setThThDThDD(3, 0, 0, 0);
-        state[nrStates].setThThDThDD(4, -0.05f, 0, 0);
-        state[nrStates].setThThDThDD(5, 0.2f, 0, 0);
-        state[nrStates].setThThDThDD(6, 0.27f, 0, 0);
+//        state[nrStates].setThThDThDD(0, -0.22f, 0, 0);
+//        state[nrStates].setThThDThDD(1, 1.08f, 0.0f, 0.2f);
+//        state[nrStates].setThThDThDD(2, -52.18f, 0, 220);
+//        state[nrStates].setThThDThDD(3, 330, 0, 0);
+//        state[nrStates].setThThDThDD(4, -20.05f, 50, 30);
+//        state[nrStates].setThThDThDD(5, 0.2f, 0, 0);
+//        state[nrStates].setThThDThDD(6, 5000.27f, 0, 0);
         nrStates ++;
 
-        /* - State 2 - */
+        /* - State 6 - */
         state[nrStates] = new ConState();
         state[nrStates].num = nrStates;
         state[nrStates].localNum = 2;
@@ -257,7 +257,7 @@ public class Controller {
         state[nrStates].transTime = 0.21f;
         state[nrStates].sensorNum = 0;
 
-        state[nrStates].setThThDThDD(0, 0, 0, 0);
+        state[nrStates].setThThDThDD(0, -0.2f, 0, 0);
         state[nrStates].setThThDThDD(1, 0, 0, 0);
         state[nrStates].setThThDThDD(2, -0.05f, 0, 0);
         state[nrStates].setThThDThDD(3, 0.8f, 0, 0.2f);
@@ -266,7 +266,7 @@ public class Controller {
         state[nrStates].setThThDThDD(6, 0.2f, 0, 0);
         nrStates ++;
 
-        /* - State 3 - */
+        /* - State 7 - */
         state[nrStates] = new ConState();
         state[nrStates].num = nrStates;
         state[nrStates].localNum = 1;
@@ -279,13 +279,13 @@ public class Controller {
 
         
 
-        state[nrStates].setThThDThDD(0, -0.22f, 0, 0);
-        state[nrStates].setThThDThDD(1, 0, 0, 0);
-        state[nrStates].setThThDThDD(2, -0.05f, 0, 0);
-        state[nrStates].setThThDThDD(3, 1.08f, 0.0f, 0.2f);
-        state[nrStates].setThThDThDD(4, -2.18f, 0, 0);
-        state[nrStates].setThThDThDD(5, 0.27f, 0, 0);
-        state[nrStates].setThThDThDD(6, 0.2f, 0, 0);
+//        state[nrStates].setThThDThDD(0, -0.22f, 0, 0);
+//        state[nrStates].setThThDThDD(1, 0, 0, 0);
+//        state[nrStates].setThThDThDD(2, -0.05f, 0, 0);
+//        state[nrStates].setThThDThDD(3, 1.08f, 0.0f, 0.2f);
+//        state[nrStates].setThThDThDD(4, -2.18f, 0, 0);
+//        state[nrStates].setThThDThDD(5, 0.27f, 0, 0);
+//        state[nrStates].setThThDThDD(6, 230.2f, 0, 0);
         nrStates ++;        
         
         groups[nrGroups] = new Group();
@@ -295,7 +295,6 @@ public class Controller {
 
         
         nrGroups++;
-
     }
     
     
@@ -392,9 +391,7 @@ public class Controller {
         
         nrGroups++;
 
-    }
-        
-    
+    }    
 }
 
 

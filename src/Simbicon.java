@@ -41,8 +41,21 @@ public class Simbicon{// extends java.applet.Applet
 	private int total_steps;
     
     
-    public void init(float push_force) {       
+    public void init(	float torso0, float torso1, float torso2, 
+    					float rhip0,  float rhip1,  float rhip2,
+    					float rknee0, float rknee1, float rknee2,
+    					//float lhip0,  float lhip1,  float lhip2, dont need
+    					float lknee0, float lknee1, float lknee2,
+    					float rankle0,float rankle1,float rankle2,
+    					float lankle0,float lankle1,float lankle2,
+    					float transTime
+    				) 
+    {       
         //GF
+    	float lhip0 = 0f;
+    	float lhip1 = 0f;
+    	float lhip2 = 0f;
+    	
         iteration_number  = 0;
         the_cost_function = 0;
         total_steps_length = 0;
@@ -62,18 +75,39 @@ public class Simbicon{// extends java.applet.Applet
         con.addCrouchWalkController();
               
         // GF
+        
+        // manually set controller params
+        con.state[4].transTime = transTime;
+        con.state[4].setThThDThDD(0, torso0,  torso1,  torso2 );		// torso
+        con.state[4].setThThDThDD(1, rhip0,   rhip1,   rhip2  );		// rhip
+        con.state[4].setThThDThDD(2, rknee0,  rknee1,  rknee2 );		// rknee
+        con.state[4].setThThDThDD(3, lhip0,   lhip1,   lhip2  );		// lhip
+        con.state[4].setThThDThDD(4, lknee0,  lknee1,  lknee2 );		// lknee
+        con.state[4].setThThDThDD(5, rankle0, rankle1, rankle2);		// rankle
+        con.state[4].setThThDThDD(6, lankle0, lankle1, lankle2);		// lankle
+        
+        // switch legs
+        con.state[6].transTime = transTime;
+        con.state[6].setThThDThDD(0, torso0,  torso1,  torso2 );		// torso
+        con.state[6].setThThDThDD(1, lhip0,   lhip1,   lhip2  );		// rhip
+        con.state[6].setThThDThDD(2, lknee0,  lknee1,  lknee2 );		// rknee
+        con.state[6].setThThDThDD(3, rhip0,   rhip1,   rhip2  );		// lhip
+        con.state[6].setThThDThDD(4, rknee0,  rknee1,  rknee2 );		// lknee
+        con.state[6].setThThDThDD(5, lankle0, lankle1, lankle2);		// rankle
+        con.state[6].setThThDThDD(6, rankle0, rankle1, rankle2);		// lankle
+        
         con.desiredGroupNumber = 1; 
         simFlag = true;
         
-        bip7.PushTime = 20f;
-        bip7.PushForce = push_force;
+        //bip7.PushTime = 20f;
+        //bip7.PushForce = push_force;
         
         while(true){
         	if (!bip7.lostControl)  
         		runLoop();
         	else {
         		System.out.println("lost control");
-        		System.exit(0);
+        		System.exit(-1);
         	}
         }
         // GF
@@ -240,7 +274,7 @@ public class Simbicon{// extends java.applet.Applet
             		float new_foot_location = bip7.getStanceFootXPos(con);
             		
             		// lets get up to speed? maybeee
-            		if (iteration_number > 10)
+            		if (iteration_number > 100)
             			updateStepLength(new_foot_location - last_foot_location);
             		
             		//System.out.println(new_foot_location - last_foot_location);
@@ -251,7 +285,7 @@ public class Simbicon{// extends java.applet.Applet
             }
         }
         iteration_number++;
-        if(iteration_number >= 500){
+        if(iteration_number >= 600){
         	int cost = calcCostFunction(iteration_number);
         	System.out.println(cost);
         	System.exit(cost);
@@ -266,12 +300,12 @@ public class Simbicon{// extends java.applet.Applet
 
 
 	private int calcCostFunction(int iteration_number) {
-		float desired_avg_step_length = 1.2f;
+		float desired_avg_step_length = 2.0f;
 		float avg_step_length = total_steps_length / total_steps;
 		
 		float step_error = (desired_avg_step_length - avg_step_length)*(desired_avg_step_length - avg_step_length);
 				
-		return (int) (step_error*1000);
+		return (int) (step_error*10000);
 	}
 	
 	
