@@ -34,11 +34,14 @@ public class Simbicon{// extends java.applet.Applet
     int last_state;
     int iteration_number;
     int the_cost_function;
+    float totalTorques[] = new float[7];
     // GF
     
     boolean shouldPanY = false;
 	private float total_steps_length;
 	private int total_steps;
+	private boolean startRecord = false;
+	private int total_toque_mesurements = 0;
     
     
     public void init(	float torso0, float torso1, float torso2, 
@@ -61,6 +64,8 @@ public class Simbicon{// extends java.applet.Applet
         total_steps_length = 0;
         total_steps = 0;
         
+        for(int i = 0; i < 7; ++i)
+        	totalTorques[i] = 0;	
         
         //initialize the biped to a valid state:
         float[] state = {0.463f, 0.98f, 0.898f, -0.229f, 0.051f, 0.276f, -0.221f, -1.430f, -0.217f, 0.086f, 0.298f, -3.268f, -0.601f, 3.167f, 0.360f, 0.697f, 0.241f, 3.532f};
@@ -262,20 +267,30 @@ public class Simbicon{// extends java.applet.Applet
         //we'll run this a few times since the timer doesn't fire fast enough
         for (int i=0;i<200;i++){
             bip7.computeGroundForces(gnd);
-            bip7Control(bip7.t);
+            bip7Control(bip7.t);           
             bip7.runSimulationStep(Dt);
             
             timeEllapsed += Dt;
             if (timeEllapsed>DtDisp){
              	
+            	if(startRecord){
+            		 // save torques
+                    for(int index_t = 0; index_t < 7; ++index_t){
+                    	totalTorques[index_t] += Math.abs(bip7.t[index_t]);
+                    }
+                    total_toque_mesurements++;
+            	}
+            	
             	// GF
             	int state = con.fsmState;
             	if (state == 6 && last_state != 6){
             		float new_foot_location = bip7.getStanceFootXPos(con);
             		
             		// lets get up to speed? maybeee
-            		if (iteration_number > 100)
+            		if (iteration_number > 1000){
+            			startRecord = true;
             			updateStepLength(new_foot_location - last_foot_location);
+            		}
             		
             		//System.out.println(new_foot_location - last_foot_location);
             		last_foot_location = new_foot_location; 
@@ -285,7 +300,7 @@ public class Simbicon{// extends java.applet.Applet
             }
         }
         iteration_number++;
-        if(iteration_number >= 600){
+        if(iteration_number >= 1600){
         	int cost = calcCostFunction(iteration_number);
         	System.out.println(cost);
         	System.exit(cost);
@@ -300,12 +315,27 @@ public class Simbicon{// extends java.applet.Applet
 
 
 	private int calcCostFunction(int iteration_number) {
-		float desired_avg_step_length = 2.0f;
+		float desired_avg_step_length = 1.0f;
 		float avg_step_length = total_steps_length / total_steps;
 		
 		float step_error = (desired_avg_step_length - avg_step_length)*(desired_avg_step_length - avg_step_length);
-				
-		return (int) (step_error*10000);
+		
+		//
+		float avg_torque = 0;
+		for(int i = 0; i < 7; ++i)
+			avg_torque += totalTorques[i];
+		
+		avg_torque /= total_toque_mesurements;
+		System.out.println("avg torque: " + avg_torque);
+		//
+		
+		float alpha = 1;
+		float beta = 0.025f;
+		
+		int cost_speed = (int) ((step_error*10000) * alpha);
+		int cost_torque = (int) ((avg_torque * avg_torque) * beta);
+		
+		return cost_speed + cost_torque;
 	}
 	
 	
